@@ -3,13 +3,9 @@ const nodeMailer = require("nodemailer");
 const sendMail = async (email, subject, text) => {
   try {
     const transporter = nodeMailer.createTransport({
-      // host: process.env.HOST,
-      // service: process.env.SERVICE,
       port: Number(process.env.EMAIL_PORT),
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      // secure:Boolean(process.env.SECURE),
+      host: process.env.HOST,
+      secure:Boolean(process.env.SECURE),
       auth: {
         user: process.env.USER,
         pass: process.env.PASS,
@@ -24,9 +20,10 @@ const sendMail = async (email, subject, text) => {
       text: subject,
       html: `
             <div>
-                <a href=${text}>Click here to verify</a>
+                <p>Please click the following link to verify your email address:</p>
+                <a href="${text}">Click here to verify</a>
             </div>
-            `,
+        `,
     });
     console.log("Email sent successfully");
   } catch (error) {

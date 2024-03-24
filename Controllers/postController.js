@@ -20,12 +20,14 @@ const createNewPost = async (req, res) => {
 // fetch all posts
 const fetchAllPosts = async (req, res) => {
   try {
-    // Find all posts and populate creator field with user details
-    const allPosts = await Post.find({})
-      .populate({
-        path: "creator",
-        select: "name email image _id",
-      });
+    // --------------------- Search filter-----------------------
+    let searchKeyword = req.query.search || "";
+    let search = { $regex: searchKeyword, $options: "i" };
+    // Find all posts and populate creator field and populate creator details
+    const allPosts = await Post.find({ title: search }).populate({
+      path: "creator",
+      select: "name email image _id",
+    });
 
     res
       .status(200)
@@ -71,11 +73,10 @@ const deletePost = async (req, res) => {
 const fetchUserPost = async (req, res) => {
   try {
     // Find all posts and populate creator field with user details
-    const allPosts = await Post.find({creator: req.body.userId})
-      .populate({
-        path: "creator",
-        select: "name email image _id",
-      });
+    const allPosts = await Post.find({ creator: req.body.userId }).populate({
+      path: "creator",
+      select: "name email image _id",
+    });
 
     res
       .status(200)
@@ -85,11 +86,10 @@ const fetchUserPost = async (req, res) => {
   }
 };
 
-
 module.exports = {
   createNewPost,
   fetchAllPosts,
   editPost,
   deletePost,
-  fetchUserPost
+  fetchUserPost,
 };
