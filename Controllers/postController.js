@@ -34,7 +34,43 @@ const fetchAllPosts = async (req, res) => {
   }
 };
 
+// edit post
+const editPost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { userId, title, codeSnippet } = req.body;
+
+    // Create new post
+    const post = await Post.findOne({ _id: postId, creator: userId });
+
+    post.title = title ? title : post.title;
+    post.codeSnippet = codeSnippet ? codeSnippet : post.codeSnippet;
+
+    // Save to database
+    await post.save();
+
+    res.status(200).json({ message: "Post Edited successfully",post });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// delete post
+const deletePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    await Post.findByIdAndDelete(postId);
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
 module.exports = {
   createNewPost,
   fetchAllPosts,
+  editPost,
+  deletePost
 };

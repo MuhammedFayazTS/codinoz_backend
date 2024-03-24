@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { createNewPost, fetchAllPosts } = require("../Controllers/postController");
+const { createNewPost, fetchAllPosts, editPost, deletePost } = require("../Controllers/postController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // Define routes
-router.post("/create", authMiddleware, createNewPost);
+// create new post
+router.post("/", authMiddleware, createNewPost);
 // fetch all post
-router.get("/", fetchAllPosts);
+router.get("/",fetchAllPosts);
+// edit post
+router.patch("/:postId", authMiddleware, editPost);
+// delete post
+router.delete("/:postId", authMiddleware, deletePost);
 
 module.exports = router;

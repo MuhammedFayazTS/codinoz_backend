@@ -23,10 +23,10 @@ const UserSchema = new mongoose.Schema({
   },
   image: {
     type: String,
+    default: "https://img.icons8.com/fluency/96/user-male-circle--v1.png",
   },
   isVerified: {
     type: Boolean,
-    required: true,
     default: false,
   },
 });
