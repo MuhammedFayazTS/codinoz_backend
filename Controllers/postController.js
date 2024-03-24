@@ -21,10 +21,11 @@ const createNewPost = async (req, res) => {
 const fetchAllPosts = async (req, res) => {
   try {
     // Find all posts and populate creator field with user details
-    const allPosts = await Post.find({}).populate({
-      path: "creator",
-      select: "name email image _id",
-    });
+    const allPosts = await Post.find({})
+      .populate({
+        path: "creator",
+        select: "name email image _id",
+      });
 
     res
       .status(200)
@@ -49,12 +50,11 @@ const editPost = async (req, res) => {
     // Save to database
     await post.save();
 
-    res.status(200).json({ message: "Post Edited successfully",post });
+    res.status(200).json({ message: "Post Edited successfully", post });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 // delete post
 const deletePost = async (req, res) => {
@@ -67,10 +67,29 @@ const deletePost = async (req, res) => {
   }
 };
 
+// fetch all posts
+const fetchUserPost = async (req, res) => {
+  try {
+    // Find all posts and populate creator field with user details
+    const allPosts = await Post.find({creator: req.body.userId})
+      .populate({
+        path: "creator",
+        select: "name email image _id",
+      });
+
+    res
+      .status(200)
+      .json({ message: "Fetched all posts successfully", allPosts });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports = {
   createNewPost,
   fetchAllPosts,
   editPost,
-  deletePost
+  deletePost,
+  fetchUserPost
 };

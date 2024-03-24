@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createNewPost, fetchAllPosts, editPost, deletePost } = require("../Controllers/postController");
+const { createNewPost, fetchAllPosts, editPost, deletePost, fetchUserPost } = require("../Controllers/postController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // Define routes
@@ -12,5 +12,7 @@ router.get("/",fetchAllPosts);
 router.patch("/:postId", authMiddleware, editPost);
 // delete post
 router.delete("/:postId", authMiddleware, deletePost);
+// user posts
+router.get("/user/",authMiddleware,fetchUserPost);
 
 module.exports = router;
